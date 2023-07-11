@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class FadeOutToObjectPool : MonoBehaviour
 {
+    public ObjectPool<GameObject> Pool;
+
     [SerializeField] private float fadeDelay = 10f;
     [SerializeField] private float currentAlpha = 1;
     [SerializeField] private float requiredAlpha = 0;
@@ -39,14 +42,8 @@ public class FadeOutToObjectPool : MonoBehaviour
     public void FadeOut()
     {
         StartCoroutine(FadeOutTimed(currentAlpha, requiredAlpha, fadeDelay));
-        //StartCoroutine(Test());
     }
 
-    private IEnumerator Test()
-    {
-        yield return new WaitForSeconds(fadeDelay);
-        Debug.Log("works");
-    }
     private IEnumerator FadeOutTimed(float currentAlpha, float requiredAlpha, float fadeTime)
     {
         foreach (Material mat in materials)
@@ -77,6 +74,7 @@ public class FadeOutToObjectPool : MonoBehaviour
         }
 
         //Debug.Log("Completed");
+        Pool.Release(gameObject);
         gameObject.SetActive(false);
     }
 }

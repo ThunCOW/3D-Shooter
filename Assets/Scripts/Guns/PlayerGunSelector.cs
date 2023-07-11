@@ -18,6 +18,8 @@ public enum PlayerWeapons
 
 public class PlayerGunSelector : MonoBehaviour
 {
+    AnimatorManager PlayerAnimatorManager;
+
     [SerializeField]
     private GunType PrimaryGun;
     [SerializeField]
@@ -26,15 +28,16 @@ public class PlayerGunSelector : MonoBehaviour
     private Transform PrimaryGunParent;
     [SerializeField]
     private Transform SecondaryGunParent;
-    [SerializeField]
-    private List<GunScriptableObject> Guns;
+
+    [SerializeField] List<GunScriptableObject> GunsSO;
+    public List<GunScriptableObject> Guns;
 
     [Space]
     [Header("Runtime Filled")]
     public GunScriptableObject ActivePrimaryGun;
     public GunScriptableObject ActiveSecondaryGun;
 
-    private PlayerWeapons _playerWeapons;
+    [SerializeField] private PlayerWeapons _playerWeapons;
     public PlayerWeapons PlayerWeapon
     {
         get { return _playerWeapons; }
@@ -45,15 +48,39 @@ public class PlayerGunSelector : MonoBehaviour
         }
     }
 
-    private void Start()
+    public int Dual_Handgun_Unlock_Level;
+    [SerializeField] private bool Dual_Handgun;
+    public int Dual_Uzi_Unlock_Level;
+    [SerializeField] private bool Dual_Uzi;
+
+    private void OnValidate()
     {
-        EquipPrimary();
-        EquipSecondary();
+        //ChangeWeapon();
     }
 
+    private void Awake()
+    {
+        foreach (GunScriptableObject gun in GunsSO)
+            Guns.Add(gun.Clone() as GunScriptableObject);
+
+        GameManager.Instance.onUnlockUpgradeList += Upgrade;
+    }
+
+    private void Start()
+    {
+        PlayerAnimatorManager = GameManager.Instance.Player.GetComponentInChildren<AnimatorManager>();
+
+        ChangeWeapon();
+    }
+
+    private void Update()
+    {
+        if (ChangeWeaponEditor)
+            ChangeWeapon();
+    }
     private void EquipPrimary()
     {
-        GunScriptableObject gun = Guns.Find(gun => gun.Type == PrimaryGun);
+        GunScriptableObject gun = Guns.Find(gun => gun.ID == PrimaryGun);
 
         if (gun == null)
         {
@@ -62,12 +89,15 @@ public class PlayerGunSelector : MonoBehaviour
         }
 
         ActivePrimaryGun = gun;
-        gun.Spawn(PrimaryGunParent, this);
+        ActivePrimaryGun.Spawn(PrimaryGunParent, this);
+        ActiveSecondaryGun = null;
+
+        PlayerAnimatorManager.AimLayerName = ActivePrimaryGun.AnimatorLayerName;
     }
 
     private void EquipSecondary()
     {
-        GunScriptableObject gun = Guns.Find(gun => gun.Type == SecondaryGun);
+        GunScriptableObject gun = Guns.Find(gun => gun.ID == SecondaryGun);
 
         if (gun == null)
         {
@@ -76,31 +106,93 @@ public class PlayerGunSelector : MonoBehaviour
         }
 
         ActiveSecondaryGun = gun;
-        gun.Spawn(SecondaryGunParent, this);
+        ActiveSecondaryGun.Spawn(SecondaryGunParent, this);
+
+        PlayerAnimatorManager.AimLayerName = ActiveSecondaryGun.AnimatorLayerName;
     }
 
     private bool primaryShoot;
+    private float lastShootTime;
+    private float lastEmptyBulletTime;
+    
     public void Shoot()
     {
-        if (ActiveSecondaryGun != null)
+        if (Time.time > ActivePrimaryGun.ShootConfig.FireRate + lastShootTime)
         {
-            if (primaryShoot)
+            if (ActivePrimaryGun.CurrentAmmo > 0 || ActivePrimaryGun.CurrentAmmo < 0)
             {
-                primaryShoot = false;
-                ActivePrimaryGun.Shoot();
+                if (ActiveSecondaryGun != null)
+                {
+                    if (primaryShoot)
+                    {
+                        primaryShoot = false;
+                        ActivePrimaryGun.Shoot();
+                    }
+                    else
+                    {
+                        primaryShoot = true;
+                        ActiveSecondaryGun.Shoot();
+                    }
+                }
+                else
+                    ActivePrimaryGun.Shoot();
+                    
+                ActivePrimaryGun.CurrentAmmo--;
+
+                lastShootTime = Time.time;
             }
             else
             {
-                primaryShoot = true;
-                ActiveSecondaryGun.Shoot();
+                if (Time.time > 0.3f + lastEmptyBulletTime)
+                {
+                    ActivePrimaryGun.AudioConfig.PlayOutOfAmmoClip(ActivePrimaryGun.ShootingAudioSource);
+                    lastEmptyBulletTime = Time.time;
+                }
             }
         }
-        else
-            ActivePrimaryGun.Shoot();
     }
 
+    private void Upgrade(int CurrentLevel)
+    {
+        if(CurrentLevel == Dual_Handgun_Unlock_Level)
+        {
+            Dual_Handgun = true;
+        }
+        else if(CurrentLevel == Dual_Uzi_Unlock_Level)
+        {
+            Dual_Uzi = true;
+        }
+    }
+
+    public bool ChangeWeaponEditor;
     public void ChangeWeapon()
     {
-        
+        if (ActivePrimaryGun != null && ActivePrimaryGun.CurrentAmmo == 0)
+            lastShootTime = Time.time;
+
+        ChangeWeaponEditor = false;
+        if (PrimaryGunParent.childCount > 0) Destroy(PrimaryGunParent.GetChild(0).gameObject);
+        if (SecondaryGunParent.childCount > 0) Destroy(SecondaryGunParent.GetChild(0).gameObject);
+        switch(PlayerWeapon)
+        {
+            case PlayerWeapons.Handgun:
+                PrimaryGun = GunType.P_Handgun;
+                SecondaryGun = GunType.S_Handgun;
+                EquipPrimary();
+                if (Dual_Handgun)
+                {
+                    EquipSecondary();
+                }
+                PlayerAnimatorManager.UpdateAimLayer();
+                break;
+            case PlayerWeapons.Uzi:
+                PrimaryGun = GunType.P_Uzi;
+                SecondaryGun = GunType.S_Uzi;
+                EquipPrimary();
+                if (Dual_Uzi)
+                    EquipSecondary();
+                PlayerAnimatorManager.UpdateAimLayer();
+                break;
+        }
     }
 }

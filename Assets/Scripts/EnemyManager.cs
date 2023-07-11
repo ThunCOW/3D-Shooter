@@ -176,9 +176,8 @@ public class EnemyManager : MonoBehaviour
     Vector3 turnDirection = Vector3.zero;
     private void Rotation()
     {
-#pragma warning disable CS0219 // Variable is assigned but its value is never used
-        transform.forward = turnDirection;
-#pragma warning restore CS0219 // Variable is assigned but its value is never used
+        if (turnDirection != Vector3.zero)
+            transform.forward = turnDirection;
     }
 
 

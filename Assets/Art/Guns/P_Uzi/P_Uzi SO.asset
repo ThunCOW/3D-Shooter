@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4464ec76f8a0a044a9a6e1c4823a714, type: 3}
+  m_Name: P_Uzi SO
+  m_EditorClassIdentifier: 
+  ID: 2
+  WeaponType: 1
+  Name: P_Handgun
+  ModelPrefab: {fileID: 1336435033451034412, guid: 73d0aef6b1e329b45b177809120e8e0a,
+    type: 3}
+  AnimatorLayerName: Handgun_Aim
+  CurrentAmmo: -1
+  Automatic: 1
+  SpawnPoint: {x: 0, y: 0.005512865, z: 0}
+  SpawnRotation: {x: -106.214, y: 92.297, z: -40.95099}
+  DamageConfig: {fileID: 11400000, guid: 21bc46d4c63c3fe4da2d594d35185cfb, type: 2}
+  AmmoConfig: {fileID: 11400000, guid: 92a32af1f5ec61f4cad7af22eebcafac, type: 2}
+  ShootConfig: {fileID: 11400000, guid: dbd182a47c9dc354ba3e59f1cb2be631, type: 2}
+  TrailConfig: {fileID: 11400000, guid: c22db16193f4493469d63e5406e9342e, type: 2}
+  AudioConfig: {fileID: 11400000, guid: f5d299c5e1c514f41bfc796c33ea2dca, type: 2}
+  ShootingAudioSource: {fileID: 0}

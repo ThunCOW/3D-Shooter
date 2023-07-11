@@ -8,6 +8,7 @@ public class InputManager : MonoBehaviour
     [Header("Player Movement")]
     PlayerControls playerControls;
     AnimatorManager animatorManager;
+    PlayerGunSelector playerGunSelector;
 
     public Vector2 MovementInput;
     public float VerticalInput;
@@ -48,9 +49,9 @@ public class InputManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        animatorManager= GetComponent<AnimatorManager>();
+        animatorManager = GetComponent<AnimatorManager>();
+        playerGunSelector = GetComponent<PlayerGunSelector>();
         mainCamera = Camera.main;
-        playerManager = GetComponent<PlayerManager>();
     }
 
     private void OnDisable()
@@ -124,13 +125,13 @@ public class InputManager : MonoBehaviour
     [Header("Mouse Click")]
     public bool MouseHeld;
     Coroutine ReleaseAimingStateRoutine = null;
-
-    private PlayerManager playerManager;
     // Mouse Click And Input Handler
     private void MouseInput()
     {
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
+            playerGunSelector.Shoot();
+
             MouseHeld = true;
             animatorManager.UpdateAimState(true);
             
@@ -139,17 +140,20 @@ public class InputManager : MonoBehaviour
                 StopCoroutine(ReleaseAimingStateRoutine);
                 ReleaseAimingStateRoutine = null;
             }
-            animatorManager.Fire();
-            playerManager.Shoot();
         }
-        else if(Input.GetMouseButtonUp(0))
+        else if (Input.GetMouseButtonUp(0))
         {
             MouseHeld = false;
 
             ReleaseAimingStateRoutine = StartCoroutine(ReleaseAimingState());
         }
-
+        else if (Input.GetMouseButton(0))
+        {
+            if (playerGunSelector.ActivePrimaryGun.Automatic)
+                playerGunSelector.Shoot();
+        }
     }
+
     private IEnumerator ReleaseAimingState()
     {
         yield return new WaitForSeconds(4);

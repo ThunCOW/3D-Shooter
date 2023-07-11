@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class AnimatorManager : MonoBehaviour
 {
-    [SerializeField] Animator playerAnimator;
-    [SerializeField] Animator gunAnimator;
+    [SerializeField] Animator PlayerAnimator;
 
+    [HideInInspector]
+    public string AimLayerName;
+
+    private bool isAiming;
 
     void Awake()
     {
-        playerAnimator = GetComponentInChildren<Animator>();
+        PlayerAnimator = GetComponentInChildren<Animator>();
     }
 
     public void UpdateAnimatorValue(float horizontalMovement, float verticalMovement)
@@ -67,17 +70,26 @@ public class AnimatorManager : MonoBehaviour
         }
         #endregion
 
-        playerAnimator.SetFloat("Horizontal", horizontalMovement, 0.1f, Time.deltaTime);
-        playerAnimator.SetFloat("Vertical", verticalMovement, 0.1f, Time.deltaTime);
+        PlayerAnimator.SetFloat("Horizontal", horizontalMovement, 0.1f, Time.deltaTime);
+        PlayerAnimator.SetFloat("Vertical", verticalMovement, 0.1f, Time.deltaTime);
     }
 
     public void UpdateAimState(bool isAiming)
     {
+        this.isAiming = isAiming;
+
         StopAllCoroutines();
         if (isAiming)
             StartCoroutine(AimWeightIncrease());
         else
             StartCoroutine(AimWeightDecrease());
+    }
+    public void UpdateAimLayer()
+    {
+        if (isAiming)
+        {
+            UpdateAimState(true);
+        }
     }
 
     float targetTime = 0.1f;
@@ -89,10 +101,10 @@ public class AnimatorManager : MonoBehaviour
         {
             timePassed += Time.deltaTime;
             
-            playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Aim"), playerAnimator.GetLayerWeight(playerAnimator.GetLayerIndex("Aim")) + timePassed / targetTime);
+            PlayerAnimator.SetLayerWeight(PlayerAnimator.GetLayerIndex(AimLayerName), PlayerAnimator.GetLayerWeight(PlayerAnimator.GetLayerIndex(AimLayerName)) + timePassed / targetTime);
             yield return null;
         }
-        playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Aim"), 1);
+        PlayerAnimator.SetLayerWeight(PlayerAnimator.GetLayerIndex(AimLayerName), 1);
     }
     IEnumerator AimWeightDecrease()
     {
@@ -100,15 +112,15 @@ public class AnimatorManager : MonoBehaviour
         while (timePassed > 0)
         {
             timePassed -= Time.deltaTime;
-            playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Aim"), timePassed / releaseTime);
+            PlayerAnimator.SetLayerWeight(PlayerAnimator.GetLayerIndex(AimLayerName), timePassed / releaseTime);
             yield return null;
         }
-        playerAnimator.SetLayerWeight(playerAnimator.GetLayerIndex("Aim"), 0);
+        PlayerAnimator.SetLayerWeight(PlayerAnimator.GetLayerIndex(AimLayerName), 0);
     }
 
     public void Fire()
     {
-        playerAnimator.SetTrigger("Shoot");
-        gunAnimator.SetTrigger("Shoot");
+        //playerAnimator.SetTrigger("Shoot");
+        //gunAnimator.SetTrigger("Shoot");
     }
 }

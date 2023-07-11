@@ -12,21 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4464ec76f8a0a044a9a6e1c4823a714, type: 3}
   m_Name: S_Handgun SO
   m_EditorClassIdentifier: 
-  Type: 1
+  ID: 1
+  WeaponType: 0
   Name: Handgun
   ModelPrefab: {fileID: 6834304398996597228, guid: 5ded9db6d8b1a914dbec45068b984205,
     type: 3}
+  AnimatorLayerName: Dual_Handgun_Aim
+  CurrentAmmo: 0
+  Automatic: 0
   SpawnPoint: {x: 0, y: 0.005512865, z: 0}
   SpawnRotation: {x: -106.214, y: 92.297, z: -40.95099}
-  GunLevels:
-  - Level: 0
-    DamageConfig: {fileID: 0}
-    ShootConfig: {fileID: 0}
-    TrailConfig: {fileID: 0}
-  - Level: 0
-    DamageConfig: {fileID: 0}
-    ShootConfig: {fileID: 0}
-    TrailConfig: {fileID: 0}
   DamageConfig: {fileID: 11400000, guid: 222d017be6d1db141b293ca5f6c09cb7, type: 2}
+  AmmoConfig: {fileID: 11400000, guid: 2a031469c25f9c04cada7853111a9961, type: 2}
   ShootConfig: {fileID: 11400000, guid: efd273d3ced576f4ba2b3e675a4179ce, type: 2}
   TrailConfig: {fileID: 11400000, guid: a140a3763853e3246a498d164e3f22bc, type: 2}
+  AudioConfig: {fileID: 11400000, guid: 42548be2ba9cf2d46b3a91df57c3f58f, type: 2}
+  ShootingAudioSource: {fileID: 0}

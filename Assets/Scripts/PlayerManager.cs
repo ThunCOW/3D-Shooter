@@ -27,9 +27,4 @@ public class PlayerManager : MonoBehaviour
     {
         playerLocomotion.HandleAllMovement();
     }
-
-    public void Shoot()
-    {
-        GunSelector.Shoot();
-    }
 }
