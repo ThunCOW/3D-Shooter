@@ -89,7 +89,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Zombie Base
-    second: {fileID: 2100000, guid: e40114e07c2854942a2295ae8bb80e6c, type: 2}
+    second: {fileID: 2100000, guid: 59506596350b6274fa5c6e82ae47d52b, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -12,6 +13,7 @@ public class SpawnManager : MonoBehaviour
     [Header("Spawn Phase And Enemies")]
     public List<SpawnPhase> SpawnPhase;
     public int WaitUntilSpawn = 5;
+    public bool CanSpawn;
 
     // Hidden Fields
     public static SpawnManager Instance;
@@ -19,16 +21,17 @@ public class SpawnManager : MonoBehaviour
     public static int CurrentSpawnPhase;
 
     public ObjectPool<GameObject> ZombiePool;
-
+    public ObjectPool<GameObject> RegularZombiePool;
+    
     // Private Fields
     private Spawner[] Spawners;
+    [SerializeField] private Spawner ChoosenSpawner;
 
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(this.gameObject);
         }
         else
             Destroy(this.gameObject);
@@ -39,7 +42,10 @@ public class SpawnManager : MonoBehaviour
     {
         Spawners = GetComponentsInChildren<Spawner>();
 
-        ZombiePool = new ObjectPool<GameObject>(CreateZombie);
+        ZombiePool = new ObjectPool<GameObject>(()=>CreateZombie(ZombiePool));
+        RegularZombiePool = new ObjectPool<GameObject>(()=>CreateZombie(RegularZombiePool));
+
+        StartCoroutine(SpawnRegular());
     }
 
     public void StartSpawnCycle()
@@ -47,38 +53,64 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(Spawn());
     }
 
-    public IEnumerator Spawn()
+    private IEnumerator Spawn()
     {
+        yield return new WaitUntil(() => CanSpawn);
         // TODO : Implement Spawn Sides
         // maybe split enemies into sides based on number of enemy limitations ? 
         // one side weak, other side stronger, as enemy amount incresed increase sides etc
-        Spawner spawner = Spawners[Random.Range(0, 3)];
-        spawner.Spawns = SpawnPhase[0].Spawns;
-        spawner.Spawn();
+        List<Spawner> remainingSpawner = Spawners.ToList();
+
+        //foreach (SpawnInfo SpawnInfo in SpawnPhase[CurrentSpawnPhase].Spawns)
+            //spawner.Spawns.Add(SpawnInfo.Clone() as SpawnInfo);
+        foreach (SpawnInfo SpawnInfo in SpawnPhase[CurrentSpawnPhase].Spawns)
+        {
+            Spawner spawner = ChoosenSpawner == null ? remainingSpawner[Random.Range(0, remainingSpawner.Count)] : ChoosenSpawner;
+
+            spawner.Spawns.Add(SpawnInfo.Clone() as SpawnInfo);
+
+            spawner.Spawn(ZombiePool);
+
+            if (ChoosenSpawner == null) remainingSpawner.Remove(spawner);
+        }
+
         
-        yield return new WaitUntil(()=>AreEnemiesDead() == true);
+        yield return new WaitUntil(()=>ZombiePool.CountActive == 0);
 
         yield return new WaitForSeconds(WaitUntilSpawn);
+
+        CurrentSpawnPhase++;
 
         StartCoroutine(Spawn());
     }
 
-    private GameObject CreateZombie()
+    private IEnumerator SpawnRegular()
     {
-        GameObject instance = Instantiate(ZombiePrefab);
-        instance.GetComponent<FadeOutToObjectPool>().Pool = ZombiePool;
+        yield return new WaitUntil(() => CanSpawn);
+        // TODO : Implement Spawn Sides
+        // maybe split enemies into sides based on number of enemy limitations ? 
+        // one side weak, other side stronger, as enemy amount incresed increase sides etc
+        Spawner spawner = ChoosenSpawner == null ? Spawners[Random.Range(0, 3)] : ChoosenSpawner;
+        //spawner.Spawns = SpawnPhase[0].Spawns;
+        SpawnInfo randomSpawn = new SpawnInfo();
+        randomSpawn.SpawnType = SpawnTypes.Zombie;
+        randomSpawn.SpawnAmount = Random.Range(1, 3);
+        
+        spawner.Spawns.Add(randomSpawn);
 
-        return instance;
+        spawner.Spawn(RegularZombiePool);
+
+        yield return new WaitForSeconds(Random.Range(5, 10));
+
+        StartCoroutine(SpawnRegular());
     }
 
-    private bool AreEnemiesDead()
+    private GameObject CreateZombie(ObjectPool<GameObject> pool)
     {
-        Debug.Log(ZombiePool.CountActive);
+        GameObject instance = Instantiate(ZombiePrefab);
+        instance.GetComponent<FadeOutToObjectPool>().Pool = pool;
 
-        if (ZombiePool.CountActive == 0)
-            return true;
-        else
-            return false;
+        return instance;
     }
 }
 

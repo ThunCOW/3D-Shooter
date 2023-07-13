@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,10 +34,14 @@ public class FadeOutToObjectPool : MonoBehaviour
         }
     }
 
-    private void OnEnable()
+    private void Start()
     {
         foreach (var r in renderers)
             materials.AddRange(r.materials);
+    }
+    private void OnEnable()
+    {
+        Appear();
     }
 
     public void FadeOut()
@@ -76,5 +81,25 @@ public class FadeOutToObjectPool : MonoBehaviour
         //Debug.Log("Completed");
         Pool.Release(gameObject);
         gameObject.SetActive(false);
+    }
+
+    public void Appear()
+    {
+        foreach (Material mat in materials)
+        {
+            mat.SetFloat("_Surface", 0);
+            mat.SetShaderPassEnabled("SHADOWCASTER", true);
+            mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Geometry;
+            mat.SetFloat("_DstBlend", 0);
+            mat.SetFloat("_SrcBlend", 1);
+            mat.SetFloat("_ZWrite", 1);
+
+        }
+        foreach (Material mat in materials)
+        {
+            Color c = new Color(mat.color.r, mat.color.g, mat.color.b, 1);
+
+            mat.color = c;
+        }
     }
 }

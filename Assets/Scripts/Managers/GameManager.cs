@@ -10,8 +10,6 @@ public class GameManager : MonoBehaviour
 
     public GameObject Zombie;
 
-    public bool canSpawn;
-
     #region *_________Score_________*
 
     public delegate void OnUnlockUpgradeList(int level);
