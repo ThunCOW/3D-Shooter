@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
 
@@ -10,29 +11,73 @@ public class ScoreManager : MonoBehaviour
     public int KillCount;
 
     [Space]
-    [SerializeField] private float _CurrentScore;
+    [Header("*********Level To Score Variables************")]
+    public AnimationCurve LevelToScoreCurve; 
+    public List<int> NextScoreLevelScoreRequirementList;            // Filled in OnValidate
+    public int BaseStartRequiredScore;
+    public int ScoreRequiredForLevelHundred;
     
+    [Space]
+    public AnimationCurve ScoreLevelDecreaseTimeCurve;
+    
+    [Space]
+    [Header("***********Score Values Editor View**************")]
+    [SerializeField] private int _MaxScoreLevel;
+    public int MaxScoreLevel
+    {
+        get { return _MaxScoreLevel; }
+        set
+        {
+            _MaxScoreLevel = value;
+            onUnlockUpgradeList?.Invoke(MaxScoreLevel + 1);
+        }
+    }
+    [SerializeField] private int _CurrentScoreLevel;
+    public int CurrentScoreLevel
+    {
+        get { return _CurrentScoreLevel; }
+        set
+        {
+            _CurrentScoreLevel = value;
+
+            UIScoreManager.Instance.ChangeScoreLevel(value + 1);
+        }
+    }
+    
+    [Space]
+    [SerializeField] private float _CurrentScore;
     public float CurrentScore
     {
         get { return _CurrentScore; }
         private set 
         { 
-            _CurrentScore = value; 
+            _CurrentScore = value;
         }
     }
+    public int LastLevelScoreRequirement;
+    public int NextLevelScoreRequirement;
 
-    //public List<int> NextScoreLevelPointRequirement;
-    public int NextScoreLevelPointRequirement;
 
-    public int MaxScoreLevel;
-    public int CurrentScoreLevel;
 
-    public AnimationCurve ScoreLevelDecreaseTimeCurve;
+    // Hidden Fields
+    public delegate void OnUnlockUpgradeList(int level);
+    public OnUnlockUpgradeList onUnlockUpgradeList;
+    
     private float ScoreLevelDecreaseTime;
 
-    [Space]
-    [Header("UI ")]
-    public TMP_Text Text_CurrentScoreLevel;
+    void OnValidate()
+    {
+        NextScoreLevelScoreRequirementList.Clear();
+        ScoreRequiredForLevelHundred = 0;
+
+        Keyframe lastFrame = LevelToScoreCurve[LevelToScoreCurve.length - 1];
+        int lastKeyTime = (int)lastFrame.time;
+        for (int i = 0; i < lastKeyTime; i++)
+        {
+            NextScoreLevelScoreRequirementList.Add((int)LevelToScoreCurve.Evaluate(i));
+            ScoreRequiredForLevelHundred += NextScoreLevelScoreRequirementList[i];
+        }
+    }
 
     // Start is called before the first frame update
     void Awake()
@@ -42,7 +87,8 @@ public class ScoreManager : MonoBehaviour
 
     void Start()
     {
-        ScoreLevelDecreaseTime = ScoreLevelDecreaseTimeCurve.Evaluate(0);    
+        ScoreLevelDecreaseTime = ScoreLevelDecreaseTimeCurve.Evaluate(0);
+        NextLevelScoreRequirement = NextScoreLevelScoreRequirementList[0];
     }
 
     public void IncreaseScore(int Point)
@@ -51,14 +97,18 @@ public class ScoreManager : MonoBehaviour
 
         CurrentScore += Point;
 
-        if (CurrentScore >= NextScoreLevelPointRequirement)
+        while (CurrentScore >= NextLevelScoreRequirement)
         {
             CurrentScoreLevel++;
-            NextScoreLevelPointRequirement += CurrentScoreLevel * 100;
+
+            LastLevelScoreRequirement = NextLevelScoreRequirement;
+            NextLevelScoreRequirement += NextScoreLevelScoreRequirementList[CurrentScoreLevel];
+
             if (CurrentScoreLevel > MaxScoreLevel) MaxScoreLevel = CurrentScoreLevel;
 
             ScoreLevelDecreaseTime = ScoreLevelDecreaseTimeCurve.Evaluate(CurrentScoreLevel);
         }
+        UIScoreManager.Instance.ChangeBarPercentage(CurrentScore, NextLevelScoreRequirement, LastLevelScoreRequirement);
     }
 
     void Update()
@@ -75,19 +125,25 @@ public class ScoreManager : MonoBehaviour
         }
         else
         {
-            CurrentScore -= 1000 * Time.deltaTime / ScoreLevelDecreaseTime;
+            CurrentScore -= (NextLevelScoreRequirement - LastLevelScoreRequirement) * Time.deltaTime / ScoreLevelDecreaseTime;
 
             if (CurrentScoreLevel > 0)
             {
-                if (CurrentScore <= NextScoreLevelPointRequirement - (CurrentScoreLevel * 100))
+                if (CurrentScore <= LastLevelScoreRequirement)
                 {
                     CurrentScoreLevel--;
 
-                    NextScoreLevelPointRequirement -= CurrentScoreLevel * 100;
+                    NextLevelScoreRequirement = LastLevelScoreRequirement;
+                    if (CurrentScoreLevel == 0)
+                        LastLevelScoreRequirement = 0;
+                    else
+                        LastLevelScoreRequirement -= NextScoreLevelScoreRequirementList[CurrentScoreLevel];
+
 
                     ScoreLevelDecreaseTime = ScoreLevelDecreaseTimeCurve.Evaluate(CurrentScoreLevel);
                 }
             }
+            UIScoreManager.Instance.ChangeBarPercentage(CurrentScore, NextLevelScoreRequirement, LastLevelScoreRequirement);
         }
     }
 }

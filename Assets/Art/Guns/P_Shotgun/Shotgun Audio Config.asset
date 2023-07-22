@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5453832d149a17c4d9086272195d8862, type: 3}
+  m_Name: Shotgun Audio Config
+  m_EditorClassIdentifier: 
+  volume: 0.3
+  FireClips:
+  - {fileID: 8300000, guid: f2db47684f327594ab1df26d909469ae, type: 3}
+  - {fileID: 8300000, guid: e06ea5ea12bda9c4db39a2d0f183c5ec, type: 3}
+  - {fileID: 8300000, guid: 6464d7bca5d858c45be0ebec0e0359b2, type: 3}
+  EmptyClip: {fileID: 8300000, guid: ba27a1b574e5ccc43bd774c1f3fbcdef, type: 3}

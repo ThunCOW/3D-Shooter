@@ -17,12 +17,12 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Zombie Base
-    second: {fileID: 2100000, guid: 6d28e889a07b7444a8650103db89789f, type: 2}
+    second: {fileID: 2100000, guid: 2c86a766d87dc374e84223a0be6249dd, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Zombie Red
-    second: {fileID: 2100000, guid: d4d294b1b5871f345acfed3e7c4b82b1, type: 2}
+    second: {fileID: 2100000, guid: d9e2e456ac805064ca8b57c50a45475f, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

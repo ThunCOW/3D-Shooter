@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bd74c6831d769c43b776e3a04e8d169, type: 3}
   m_Name: Uzi Ammo Config
   m_EditorClassIdentifier: 
-  MaxAmmo: -1
+  MaxAmmo: 50

@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Woood
-    second: {fileID: 2100000, guid: faea15fb5b075db40b0e989ddefa7415, type: 2}
+    second: {fileID: 2100000, guid: 4fd6da699fa64c74a8cfc491beac751d, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

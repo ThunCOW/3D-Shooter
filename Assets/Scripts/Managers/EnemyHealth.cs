@@ -20,7 +20,8 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     {
         CurrentHealth = MaxHealth;
     }
-    public void TakeDamage(int Damage)
+
+    public void TakeDamage(int Damage, Vector3 forceDir, float pushDistance)
     {
         int damageTaken = Mathf.Clamp(Damage, 0, CurrentHealth);
 
@@ -29,13 +30,13 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         // Shooting somebody who is already dead
         if(damageTaken != 0)
         {
-            OnTakeDamage?.Invoke(damageTaken);
+            OnTakeDamage?.Invoke(forceDir, pushDistance);
         }
 
         // hp is 0 but dmg taken is not, As long as we took damage, then we are dead
         if(CurrentHealth == 0 && damageTaken != 0)
         {
-            OnDeath?.Invoke(transform.position);
+            OnDeath?.Invoke(forceDir);
         }
     }
 }

@@ -12,10 +12,11 @@ public class FadeOutToObjectPool : MonoBehaviour
     [SerializeField] private float currentAlpha = 1;
     [SerializeField] private float requiredAlpha = 0;
 
+    [Space]
     [SerializeField] private List<Material> materials = new List<Material>();
+    [SerializeField] private bool getVariables;
     [SerializeField] private List<SkinnedMeshRenderer> renderers = new List<SkinnedMeshRenderer>();
 
-    public bool getVariables;
 
     private void OnValidate()
     {

@@ -35,9 +35,9 @@ public class PlayerLocomotion : MonoBehaviour
     {
         //moveDirection = AimTarget.transform.forward * inputManager.VerticalInput * -1;
         //moveDirection = moveDirection + AimTarget.transform.right * inputManager.HorizontalInput * -1;
-        moveDirection = mainCamera.transform.forward * inputManager.VerticalInput;
+        moveDirection.z = inputManager.VerticalInput * -1;
         //moveDirection = new Vector3(0,0,1) * inputManager.VerticalInput;
-        moveDirection = moveDirection + mainCamera.transform.right * inputManager.HorizontalInput;
+        moveDirection.x = inputManager.HorizontalInput * -1;
         //moveDirection = moveDirection + new Vector3(1, 0, 0) * inputManager.HorizontalInput;
         moveDirection.Normalize();
         moveDirection.y = 0;

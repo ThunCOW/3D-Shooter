@@ -14,14 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 0
   WeaponType: 0
+  Sprite: {fileID: 21300000, guid: dfede068a01c28e4fbea9b857213eee0, type: 3}
   Name: P_Handgun
   ModelPrefab: {fileID: 3045503694206921843, guid: b05b3894a0c7e754ba607211001b3569,
     type: 3}
   AnimatorLayerName: Handgun_Aim
+  pushDistance: 1.3
   CurrentAmmo: 0
-  Automatic: 0
-  SpawnPoint: {x: 0, y: 0.005512865, z: 0}
-  SpawnRotation: {x: -106.214, y: 92.297, z: -40.95099}
+  Automatic: 1
+  lastShootTime: 0
   DamageConfig: {fileID: 11400000, guid: 222d017be6d1db141b293ca5f6c09cb7, type: 2}
   AmmoConfig: {fileID: 11400000, guid: 2a031469c25f9c04cada7853111a9961, type: 2}
   ShootConfig: {fileID: 11400000, guid: efd273d3ced576f4ba2b3e675a4179ce, type: 2}

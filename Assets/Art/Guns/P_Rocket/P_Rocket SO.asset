@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4464ec76f8a0a044a9a6e1c4823a714, type: 3}
+  m_Name: P_Rocket SO
+  m_EditorClassIdentifier: 
+  ID: 5
+  WeaponType: 3
+  Sprite: {fileID: 21300000, guid: 8b97d5934f4b3fa499f92adf8646787b, type: 3}
+  Name: P_Rocket
+  ModelPrefab: {fileID: 7356813350098973372, guid: e4e7b8fca19908c44b49266939c2f7d4,
+    type: 3}
+  AnimatorLayerName: Rocket_Aim
+  CurrentAmmo: -1
+  Automatic: 1
+  lastShootTime: 0
+  SpawnPoint: {x: 0, y: 0.005512865, z: 0}
+  SpawnRotation: {x: -106.214, y: 92.297, z: -40.95099}
+  DamageConfig: {fileID: 11400000, guid: 9a0e5d71cacf2c84294672888fb8baaf, type: 2}
+  AmmoConfig: {fileID: 11400000, guid: aaa0039c0762fac44ba1ed6f23162a93, type: 2}
+  ShootConfig: {fileID: 11400000, guid: 9fd29da4d81138d43a565a3e8d00ae54, type: 2}
+  TrailConfig: {fileID: 11400000, guid: 58455267a897dc6429b415274132f662, type: 2}
+  AudioConfig: {fileID: 11400000, guid: f4a28b66d352a2b41b51303ed6e5a2a4, type: 2}
+  ShootingAudioSource: {fileID: 0}

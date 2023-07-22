@@ -7,76 +7,82 @@ public enum GunType
 {
     P_Handgun, S_Handgun,
     P_Uzi, S_Uzi,
+    P_Shotgun,
+    P_Rocket,
 }
 
 // Player weapons are the main weapons player will see and select
 public enum PlayerWeapons
 {
     Handgun,
-    Uzi
+    Uzi,
+    Shotgun,
+    Rocket,
 }
 
 public class PlayerGunSelector : MonoBehaviour
 {
     AnimatorManager PlayerAnimatorManager;
-
-    [SerializeField]
-    private GunType PrimaryGun;
-    [SerializeField]
-    private GunType SecondaryGun;
-    [SerializeField]
-    private Transform PrimaryGunParent;
-    [SerializeField]
-    private Transform SecondaryGunParent;
-
-    [SerializeField] List<GunScriptableObject> GunsSO;
-    public List<GunScriptableObject> Guns;
+    
+    [Header("************Editor Filled*************")]
+    [SerializeField] private Transform PrimaryGunParent;
+    [SerializeField] private Transform SecondaryGunParent;
 
     [Space]
-    [Header("Runtime Filled")]
+    [Header("**************Runtime Filled*****************")]
+
+    [SerializeField] private GunType PrimaryGun;
+    [SerializeField] private GunType SecondaryGun;
+    [Space]
     public GunScriptableObject ActivePrimaryGun;
     public GunScriptableObject ActiveSecondaryGun;
+    [Space]
+    [SerializeField] List<GunScriptableObject> GunsSO;
+    public List<GunScriptableObject> Guns;
 
     [SerializeField] private PlayerWeapons _playerWeapons;
     public PlayerWeapons PlayerWeapon
     {
         get { return _playerWeapons; }
         set 
-        { 
+        {
             _playerWeapons = value;
-            ChangeWeapon();
+            EquipWeapon();
         }
     }
 
+    [Header("************Weapon Unlock Variables**********")]
+    public int Uzi_Unlock_Level;
+    public int Shotgun_Unlock_Level;
+    public int Rocket_Launcher_Unlock_Level;
     public int Dual_Handgun_Unlock_Level;
-    [SerializeField] private bool Dual_Handgun;
     public int Dual_Uzi_Unlock_Level;
-    [SerializeField] private bool Dual_Uzi;
 
-    private void OnValidate()
-    {
-        //ChangeWeapon();
-    }
+    //**************** Runtime Filled ****************
+    public int WeaponLastUnlockIndex;                               // The equivelant of PlayerWeapons in index, consider it like the last unlocked index in PlayerWeapons, starts with 0 which is only handgun
+
+    [Header("*************Weapon Unlock Editor Variables***********")]
+    [SerializeField] private bool Dual_Handgun;
+    [SerializeField] private bool Dual_Uzi;
 
     private void Awake()
     {
         foreach (GunScriptableObject gun in GunsSO)
             Guns.Add(gun.Clone() as GunScriptableObject);
-
-        GameManager.Instance.onUnlockUpgradeList += Upgrade;
     }
 
     private void Start()
     {
         PlayerAnimatorManager = GameManager.Instance.Player.GetComponentInChildren<AnimatorManager>();
 
-        ChangeWeapon();
+        EquipWeapon();
+
+        ScoreManager.Instance.onUnlockUpgradeList += UnlockWeapon;
     }
 
     private void Update()
     {
-        if (ChangeWeaponEditor)
-            ChangeWeapon();
+        if (ChangeWeaponOnRuntime) EquipWeapon();
     }
     private void EquipPrimary()
     {
@@ -93,6 +99,8 @@ public class PlayerGunSelector : MonoBehaviour
         ActiveSecondaryGun = null;
 
         PlayerAnimatorManager.AimLayerName = ActivePrimaryGun.AnimatorLayerName;
+
+        UIWeaponManager.Instance.ChangeWeapon(ActivePrimaryGun.Sprite, ActivePrimaryGun.CurrentAmmo);
     }
 
     private void EquipSecondary()
@@ -111,13 +119,52 @@ public class PlayerGunSelector : MonoBehaviour
         PlayerAnimatorManager.AimLayerName = ActiveSecondaryGun.AnimatorLayerName;
     }
 
+    public bool ChangeWeaponOnRuntime;
+    private void EquipWeapon()
+    {
+        //if (ActivePrimaryGun != null && ActivePrimaryGun.CurrentAmmo == 0) lastShootTime = Time.time;
+
+        ChangeWeaponOnRuntime = false;
+        if (PrimaryGunParent.childCount > 0) Destroy(PrimaryGunParent.GetChild(0).gameObject);
+        if (SecondaryGunParent.childCount > 0) Destroy(SecondaryGunParent.GetChild(0).gameObject);
+        switch (PlayerWeapon)
+        {
+            case PlayerWeapons.Handgun:
+                PrimaryGun = GunType.P_Handgun;
+                SecondaryGun = GunType.S_Handgun;
+                EquipPrimary();
+                PlayerAnimatorManager.UpdateAimLayer();
+                if (Dual_Handgun)
+                    EquipSecondary();
+                break;
+            case PlayerWeapons.Uzi:
+                PrimaryGun = GunType.P_Uzi;
+                SecondaryGun = GunType.S_Uzi;
+                EquipPrimary();
+                PlayerAnimatorManager.UpdateAimLayer();
+                if (Dual_Uzi)
+                    EquipSecondary();
+                break;
+            case PlayerWeapons.Shotgun:
+                PrimaryGun = GunType.P_Shotgun;
+                EquipPrimary();
+                break;
+            case PlayerWeapons.Rocket:
+                PrimaryGun = GunType.P_Rocket;
+                EquipPrimary();
+                break;
+            default:
+                Debug.LogWarning("Add Weapon Here");
+                break;
+        }
+        PlayerAnimatorManager.UpdateAimLayer();
+    }
+
     private bool primaryShoot;
-    private float lastShootTime;
     private float lastEmptyBulletTime;
-    
     public void Shoot()
     {
-        if (Time.time > ActivePrimaryGun.ShootConfig.FireRate + lastShootTime)
+        if (Time.time > ActivePrimaryGun.ShootConfig.FireRate + ActivePrimaryGun.lastShootTime)
         {
             if (ActivePrimaryGun.CurrentAmmo > 0 || ActivePrimaryGun.CurrentAmmo < 0)
             {
@@ -138,8 +185,9 @@ public class PlayerGunSelector : MonoBehaviour
                     ActivePrimaryGun.Shoot();
                     
                 ActivePrimaryGun.CurrentAmmo--;
+                UIWeaponManager.Instance.ChangeAmmoText(ActivePrimaryGun.CurrentAmmo);
 
-                lastShootTime = Time.time;
+                ActivePrimaryGun.lastShootTime = Time.time;
             }
             else
             {
@@ -152,47 +200,50 @@ public class PlayerGunSelector : MonoBehaviour
         }
     }
 
-    private void Upgrade(int CurrentLevel)
+    private void UnlockWeapon(int CurrentLevel)
     {
+        if (CurrentLevel == Uzi_Unlock_Level)
+        {
+            WeaponLastUnlockIndex = 1;
+        }
+        else if(CurrentLevel == Shotgun_Unlock_Level)
+        {
+            WeaponLastUnlockIndex = 2;
+        }
+        else if(CurrentLevel == Rocket_Launcher_Unlock_Level)
+        {
+            WeaponLastUnlockIndex = 3;
+        }
+
         if(CurrentLevel == Dual_Handgun_Unlock_Level)
         {
             Dual_Handgun = true;
+            if (ActivePrimaryGun.WeaponType == PlayerWeapons.Handgun)
+                SelectWeapon((int)PlayerWeapons.Handgun);
         }
         else if(CurrentLevel == Dual_Uzi_Unlock_Level)
         {
             Dual_Uzi = true;
+            if (ActivePrimaryGun.WeaponType == PlayerWeapons.Uzi)
+                SelectWeapon((int)PlayerWeapons.Uzi);
         }
     }
 
-    public bool ChangeWeaponEditor;
-    public void ChangeWeapon()
+    public void ScrollWeapon(int indexChange)
     {
-        if (ActivePrimaryGun != null && ActivePrimaryGun.CurrentAmmo == 0)
-            lastShootTime = Time.time;
+        if (WeaponLastUnlockIndex == 0)
+            return;
+        PlayerWeapon = (PlayerWeapons)mod((((int)PlayerWeapon) + indexChange), WeaponLastUnlockIndex);
+    }
 
-        ChangeWeaponEditor = false;
-        if (PrimaryGunParent.childCount > 0) Destroy(PrimaryGunParent.GetChild(0).gameObject);
-        if (SecondaryGunParent.childCount > 0) Destroy(SecondaryGunParent.GetChild(0).gameObject);
-        switch(PlayerWeapon)
-        {
-            case PlayerWeapons.Handgun:
-                PrimaryGun = GunType.P_Handgun;
-                SecondaryGun = GunType.S_Handgun;
-                EquipPrimary();
-                if (Dual_Handgun)
-                {
-                    EquipSecondary();
-                }
-                PlayerAnimatorManager.UpdateAimLayer();
-                break;
-            case PlayerWeapons.Uzi:
-                PrimaryGun = GunType.P_Uzi;
-                SecondaryGun = GunType.S_Uzi;
-                EquipPrimary();
-                if (Dual_Uzi)
-                    EquipSecondary();
-                PlayerAnimatorManager.UpdateAimLayer();
-                break;
-        }
+    public void SelectWeapon(int index)
+    {
+        if (index <= WeaponLastUnlockIndex)
+            PlayerWeapon = (PlayerWeapons)index;
+    }
+
+    private int mod(int x, int m)
+    {
+        return (x % m + m) % m;
     }
 }

@@ -8,36 +8,6 @@ public class GameManager : MonoBehaviour
 
     public GameObject Player;
 
-    public GameObject Zombie;
-
-    #region *_________Score_________*
-
-    public delegate void OnUnlockUpgradeList(int level);
-    public OnUnlockUpgradeList onUnlockUpgradeList;
-
-    [SerializeField] private int _currentLevel;
-    public int CurrentLevel
-    {
-        get { return _currentLevel; }
-        set
-        {
-            _currentLevel = value;
-            if (_currentLevel > _MaxReachedLevel)
-                MaxReachedLevel = _currentLevel;
-        }
-    }
-    private int _MaxReachedLevel;
-    public int MaxReachedLevel
-    {
-        get { return _MaxReachedLevel; }
-        set
-        {
-            _MaxReachedLevel = value;
-            onUnlockUpgradeList?.Invoke(CurrentLevel);
-        }
-    }
-    #endregion
-
     void Awake()
     {
         if (Instance == null)
@@ -53,8 +23,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         StartCoroutine(SpawnEnemy());
-
-        CurrentLevel = 10;
     }
 
     IEnumerator SpawnEnemy()

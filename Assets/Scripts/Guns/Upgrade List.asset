@@ -13,7 +13,147 @@ MonoBehaviour:
   m_Name: Upgrade List
   m_EditorClassIdentifier: 
   Upgrades:
+  - Level: 2
+    Upgrades:
+    - UpgradeType: 0
+      Upgrade: {fileID: 11400000, guid: e632450f1d1bf8544b33d932f7753dd4, type: 2}
+  - Level: 4
+    Upgrades:
+    - UpgradeType: 0
+      Upgrade: {fileID: 11400000, guid: 631f4d0479119f14d9711471707c1f87, type: 2}
   - Level: 5
     Upgrades:
     - UpgradeType: 0
-      Upgrade: {fileID: 11400000, guid: cbe0bb8c60ddb414182e8b0c8735b37a, type: 2}
+      Upgrade: {fileID: 11400000, guid: 2af2f1070fbb5424d8a2814e308486c8, type: 2}
+  - Level: 7
+    Upgrades:
+    - UpgradeType: 1
+      Upgrade: {fileID: 11400000, guid: 6b059ecae6d4e91479687c9c3b9e4ed6, type: 2}
+  - Level: 8
+    Upgrades:
+    - UpgradeType: 1
+      Upgrade: {fileID: 11400000, guid: 1b5f745c6dc05d04c96727be721f0f58, type: 2}
+  - Level: 9
+    Upgrades:
+    - UpgradeType: 1
+      Upgrade: {fileID: 11400000, guid: f47e881db4aeb294c98d4661f774dda2, type: 2}
+  - Level: 10
+    Upgrades:
+    - UpgradeType: 0
+      Upgrade: {fileID: 11400000, guid: 30e45f33ecee8574790df4a95e0aab90, type: 2}
+  - Level: 14
+    Upgrades:
+    - UpgradeType: 1
+      Upgrade: {fileID: 11400000, guid: bdd00f5b93e02294da39b12b41c3a1bc, type: 2}
+  - Level: 16
+    Upgrades:
+    - UpgradeType: 1
+      Upgrade: {fileID: 11400000, guid: 77f0885c2954a0c42961022e6af5b0d3, type: 2}
+  - Level: 18
+    Upgrades:
+    - UpgradeType: 1
+      Upgrade: {fileID: 11400000, guid: be0ce4144a1281d41807227fef0dcb57, type: 2}
+  - Level: 19
+    Upgrades:
+    - UpgradeType: 0
+      Upgrade: {fileID: 11400000, guid: 9997cf6587cf9cd4191b7a9ec695efa6, type: 2}
+  - Level: 20
+    Upgrades:
+    - UpgradeType: 2
+      Upgrade: {fileID: 11400000, guid: 24c05c7484f42554593921ff18e37f8a, type: 2}
+  - Level: 21
+    Upgrades:
+    - UpgradeType: 0
+      Upgrade: {fileID: 11400000, guid: 67bc3f01d49cb2047830eed306d068ce, type: 2}
+  - Level: 22
+    Upgrades:
+    - UpgradeType: 1
+      Upgrade: {fileID: 11400000, guid: e4b07cd5f5923234f9bd7ab78fb9f8f9, type: 2}
+  - Level: 23
+    Upgrades:
+    - UpgradeType: 2
+      Upgrade: {fileID: 11400000, guid: eaee513d2ee185f4997436735a904a5a, type: 2}
+  - Level: 24
+    Upgrades:
+    - UpgradeType: 1
+      Upgrade: {fileID: 11400000, guid: a5822898fff39824fb62da74b7cfc649, type: 2}
+  - Level: 25
+    Upgrades:
+    - UpgradeType: 2
+      Upgrade: {fileID: 11400000, guid: 3c21083b28bef1b488af92bcdaff704a, type: 2}
+  - Level: 26
+    Upgrades:
+    - UpgradeType: 2
+      Upgrade: {fileID: 11400000, guid: cd73c45bf86688a45a43c9b29ddac369, type: 2}
+  - Level: 32
+    Upgrades:
+    - UpgradeType: 0
+      Upgrade: {fileID: 11400000, guid: 6cf6bb15e1406c74aa379957b6d3296d, type: 2}
+  - Level: 34
+    Upgrades:
+    - UpgradeType: 2
+      Upgrade: {fileID: 11400000, guid: 22dbf5c835929c94c95409e8ae2b47bc, type: 2}
+  - Level: 36
+    Upgrades:
+    - UpgradeType: 1
+      Upgrade: {fileID: 11400000, guid: aaa38e110af4fc943bec486b3bfc61a1, type: 2}
+  - Level: 38
+    Upgrades:
+    - UpgradeType: 3
+      Upgrade: {fileID: 11400000, guid: 13902f87cb7c3e0408ad6bfba4022fab, type: 2}
+  - Level: 40
+    Upgrades:
+    - UpgradeType: 2
+      Upgrade: {fileID: 11400000, guid: 0eed3be20ec92b04bb0c8dc3939cb214, type: 2}
+  - Level: 42
+    Upgrades:
+    - UpgradeType: 3
+      Upgrade: {fileID: 11400000, guid: 7694d3bdac5133647a17a082358d2e94, type: 2}
+  - Level: 44
+    Upgrades:
+    - UpgradeType: 0
+      Upgrade: {fileID: 11400000, guid: fef8bc8ee1b97a147bdd8d8d67987174, type: 2}
+  - Level: 46
+    Upgrades:
+    - UpgradeType: 3
+      Upgrade: {fileID: 11400000, guid: 45fa7b7dea27a8746bc000200d4cf606, type: 2}
+  - Level: 48
+    Upgrades:
+    - UpgradeType: 2
+      Upgrade: {fileID: 11400000, guid: 646327630681e3f4eb9f59d2d1fcb6a4, type: 2}
+  - Level: 50
+    Upgrades:
+    - UpgradeType: 3
+      Upgrade: {fileID: 11400000, guid: 133b3eb7200b5d94faf2825c373996cc, type: 2}
+  - Level: 52
+    Upgrades:
+    - UpgradeType: 1
+      Upgrade: {fileID: 11400000, guid: 88994d4f348dcda428581679652555d3, type: 2}
+  - Level: 54
+    Upgrades:
+    - UpgradeType: 2
+      Upgrade: {fileID: 11400000, guid: ba67c322958cf164a9792f7aba86dc4b, type: 2}
+  - Level: 56
+    Upgrades:
+    - UpgradeType: 3
+      Upgrade: {fileID: 11400000, guid: 90eb6efb43138ab4ab001b6f2ad6fe80, type: 2}
+  - Level: 58
+    Upgrades:
+    - UpgradeType: 2
+      Upgrade: {fileID: 11400000, guid: cf80bae303aa8ae41b16e42da4cbc01b, type: 2}
+    - UpgradeType: 2
+      Upgrade: {fileID: 11400000, guid: 3b494a11f5b1ad547a02ca3037d183d7, type: 2}
+  - Level: 60
+    Upgrades:
+    - UpgradeType: 3
+      Upgrade: {fileID: 11400000, guid: a0b20eccec6ed8c4c88b573eb28f093c, type: 2}
+  - Level: 65
+    Upgrades:
+    - UpgradeType: 3
+      Upgrade: {fileID: 11400000, guid: 0eca777db3bc2ed4586cef6807c97ea1, type: 2}
+  - Level: 70
+    Upgrades:
+    - UpgradeType: 3
+      Upgrade: {fileID: 11400000, guid: 1656d018d93d6ad40ac0fbc88c540fce, type: 2}
+    - UpgradeType: 3
+      Upgrade: {fileID: 11400000, guid: 8dcceccde7c59e944af2938b4e280e0d, type: 2}

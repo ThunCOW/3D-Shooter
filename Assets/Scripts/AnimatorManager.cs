@@ -7,7 +7,17 @@ public class AnimatorManager : MonoBehaviour
     [SerializeField] Animator PlayerAnimator;
 
     [HideInInspector]
-    public string AimLayerName;
+    private string AimLayerNameOld;
+    [SerializeField] private string _AimLayerName;
+    public string AimLayerName
+    {
+        get { return _AimLayerName; }
+        set 
+        {
+            AimLayerNameOld = AimLayerName == "" ? value : AimLayerName;
+            _AimLayerName = value;
+        }
+    }
 
     private bool isAiming;
 
@@ -16,7 +26,7 @@ public class AnimatorManager : MonoBehaviour
         PlayerAnimator = GetComponentInChildren<Animator>();
     }
 
-    public void UpdateAnimatorValue(float horizontalMovement, float verticalMovement)
+    public void UpdateAnimatorValue(float horizontalMovement, float verticalMovement)               // Character Turn Animations
     {
         //Animation Snapping
 #pragma warning disable CS0219 // Variable is assigned but its value is never used
@@ -90,6 +100,7 @@ public class AnimatorManager : MonoBehaviour
         {
             UpdateAimState(true);
         }
+        ResetOldAimState();
     }
 
     float targetTime = 0.1f;
@@ -116,6 +127,10 @@ public class AnimatorManager : MonoBehaviour
             yield return null;
         }
         PlayerAnimator.SetLayerWeight(PlayerAnimator.GetLayerIndex(AimLayerName), 0);
+    }
+    private void ResetOldAimState()
+    {
+        PlayerAnimator.SetLayerWeight(PlayerAnimator.GetLayerIndex(AimLayerNameOld), 0);
     }
 
     public void Fire()

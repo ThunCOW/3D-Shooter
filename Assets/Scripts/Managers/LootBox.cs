@@ -52,21 +52,33 @@ public class LootBox : MonoBehaviour
     {
         audioSource.PlayOneShot(PickupSound, PickUpVolume);
 
-        PlayerWeapons randomWeaponLoot = (PlayerWeapons)Random.Range(0, System.Enum.GetNames(typeof(PlayerWeapons)).Length);
-        
-        GunScriptableObject gun;
+        PlayerWeapons randomWeaponLoot;
+        if (playerGunSelector.WeaponLastUnlockIndex == 0)
+            randomWeaponLoot = PlayerWeapons.Uzi;
+        else
+            randomWeaponLoot = (PlayerWeapons)Random.Range(1, playerGunSelector.WeaponLastUnlockIndex + 1);
 
+        GunScriptableObject gun;
         switch (randomWeaponLoot)
         {
             case PlayerWeapons.Handgun:
                 gun = playerGunSelector.Guns.Find(gun => gun.ID == GunType.P_Handgun);
-                gun.CurrentAmmo = gun.AmmoConfig.MaxAmmo;
                 break;
             case PlayerWeapons.Uzi:
                 gun = playerGunSelector.Guns.Find(gun => gun.ID == GunType.P_Uzi);
-                gun.CurrentAmmo = gun.AmmoConfig.MaxAmmo;
+                break;
+            case PlayerWeapons.Shotgun:
+                gun = playerGunSelector.Guns.Find(gun => gun.ID == GunType.P_Shotgun);
+                break;
+            case PlayerWeapons.Rocket:
+                gun = playerGunSelector.Guns.Find(gun => gun.ID == GunType.P_Rocket);
+                break;
+            default:
+                gun = playerGunSelector.Guns.Find(gun => gun.ID == GunType.P_Handgun);
                 break;
         }
+        gun.CurrentAmmo = gun.AmmoConfig.MaxAmmo;
+        if (playerGunSelector.ActivePrimaryGun == gun) UIWeaponManager.Instance.ChangeAmmoText(gun.CurrentAmmo);
 
         foreach (GameObject box in boxes)
         {

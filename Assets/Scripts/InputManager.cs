@@ -64,8 +64,7 @@ public class InputManager : MonoBehaviour
         HandleTargetPosition();
         HandleMovementInput();
         MouseInput();
-        //HandleJump
-        //HandleAction
+        SelectGunInputs();
     }
 
     // Sabit açýlý üstten kamera ve fareyi takip eden karakter animasyon inputlarý
@@ -128,6 +127,7 @@ public class InputManager : MonoBehaviour
     // Mouse Click And Input Handler
     private void MouseInput()
     {
+        #region Mouse Left Button
         if (Input.GetMouseButtonDown(0))
         {
             playerGunSelector.Shoot();
@@ -152,6 +152,18 @@ public class InputManager : MonoBehaviour
             if (playerGunSelector.ActivePrimaryGun.Automatic)
                 playerGunSelector.Shoot();
         }
+        #endregion
+
+        #region Mouse Scroll Wheel
+        if (Input.GetAxisRaw("Mouse ScrollWheel") > 0f)
+        {
+            playerGunSelector.ScrollWeapon(+1);
+        }
+        else if (Input.GetAxisRaw("Mouse ScrollWheel") < 0f)
+        {
+            playerGunSelector.ScrollWeapon(-1);
+        }
+        #endregion
     }
 
     private IEnumerator ReleaseAimingState()
@@ -161,5 +173,25 @@ public class InputManager : MonoBehaviour
         ReleaseAimingStateRoutine = null;
 
         animatorManager.UpdateAimState(false);
+    }
+
+    private void SelectGunInputs()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            playerGunSelector.SelectWeapon(0);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            playerGunSelector.SelectWeapon(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            playerGunSelector.SelectWeapon(2);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            playerGunSelector.SelectWeapon(3);
+        }
     }
 }

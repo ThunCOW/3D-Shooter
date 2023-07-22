@@ -6,11 +6,11 @@ using UnityEngine.Pool;
 
 public class Spawner : MonoBehaviour
 {
-    public List<SpawnInfo> Spawns;
+    public SpawnSide SpawnSide;
 
     public void Spawna()
     {
-        foreach (SpawnInfo spawn in Spawns) 
+        /*foreach (SpawnSide spawn in SpawnSide) 
         {
             while (spawn.SpawnAmount > 0)
             {
@@ -23,19 +23,19 @@ public class Spawner : MonoBehaviour
 
                 spawn.SpawnAmount--;
             }
-        }
+        }*/
     }
 
-    public void Spawn(ObjectPool<GameObject> pool)
+    public void Spawn()
     {
-        foreach (SpawnInfo spawn in Spawns)
+        foreach (Spawn spawn in SpawnSide.Side)
         {
             while (spawn.SpawnAmount > 0)
             {
                 Vector3 randomSpawnPos = new Vector3(Random.Range(-10, 11), SpawnManager.Instance.ZombiePrefab.transform.position.y, Random.Range(-10, 11));
                 randomSpawnPos = randomSpawnPos + transform.position;
 
-                GameObject Zombie = pool.Get();
+                GameObject Zombie = SpawnManager.Instance.GetPool(spawn.EnemyType).Get();
                 Zombie.SetActive(true);
 
                 NavMeshAgent agent = Zombie.GetComponentInChildren<NavMeshAgent>();
@@ -70,26 +70,31 @@ public class Spawner : MonoBehaviour
             }
         }
     }
+
+    
 }
 
 [System.Serializable]
-public class SpawnInfo : System.ICloneable
+public class SpawnSide : System.ICloneable
 {
-    public int SpawnAmount;
-    public SpawnTypes SpawnType;
+    public List<Spawn> Side;
 
     public object Clone()
     {
-        SpawnInfo info = new SpawnInfo();
+        SpawnSide side = new SpawnSide();
         
-        info.SpawnAmount = SpawnAmount;
-        info.SpawnType = SpawnType;
+        side.Side = new List<Spawn>();
+        side.Side.AddRange(Side);
+        //info.SpawnAmount = SpawnAmount;
+        //info.SpawnType = SpawnType;
 
-        return info;
+        return side;
     }
 }
 
-public enum SpawnTypes
+[System.Serializable]
+public class Spawn
 {
-    Zombie,
+    public int SpawnAmount;
+    public EnemyType EnemyType;
 }
