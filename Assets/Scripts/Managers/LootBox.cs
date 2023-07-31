@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class LootBox : MonoBehaviour
@@ -33,16 +34,6 @@ public class LootBox : MonoBehaviour
         playerGunSelector = GameManager.Instance.Player.GetComponent<PlayerGunSelector>();
     }
 
-    void OnEnable()
-    {
-        
-    }
-
-    void OnDisable()
-    {
-        
-    }
-
     void OnTriggerEnter(Collider other)
     {
         RandomLoot();
@@ -53,30 +44,36 @@ public class LootBox : MonoBehaviour
         audioSource.PlayOneShot(PickupSound, PickUpVolume);
 
         PlayerWeapons randomWeaponLoot;
-        if (playerGunSelector.WeaponLastUnlockIndex == 0)
+        if ((int)playerGunSelector.WeaponLastUnlock == 0)
             randomWeaponLoot = PlayerWeapons.Uzi;
         else
-            randomWeaponLoot = (PlayerWeapons)Random.Range(1, playerGunSelector.WeaponLastUnlockIndex + 1);
+            randomWeaponLoot = (PlayerWeapons)Random.Range(1, (int)playerGunSelector.WeaponLastUnlock + 1);
 
         GunScriptableObject gun;
         switch (randomWeaponLoot)
         {
             case PlayerWeapons.Handgun:
                 gun = playerGunSelector.Guns.Find(gun => gun.ID == GunType.P_Handgun);
+                Debug.LogWarning("Shouldn't enter here");
                 break;
             case PlayerWeapons.Uzi:
                 gun = playerGunSelector.Guns.Find(gun => gun.ID == GunType.P_Uzi);
+                if ((int)playerGunSelector.WeaponLastUnlock != 0) SpawnLootNotification("Uzi Ammo is replenished");
                 break;
             case PlayerWeapons.Shotgun:
                 gun = playerGunSelector.Guns.Find(gun => gun.ID == GunType.P_Shotgun);
+                SpawnLootNotification("Shotgun Ammo is replenished");
                 break;
             case PlayerWeapons.Rocket:
                 gun = playerGunSelector.Guns.Find(gun => gun.ID == GunType.P_Rocket);
+                SpawnLootNotification("Rocket Launcher Ammo is replenished");
                 break;
             default:
                 gun = playerGunSelector.Guns.Find(gun => gun.ID == GunType.P_Handgun);
+                Debug.LogWarning("Shouldn't enter here");
                 break;
         }
+        if ((int)playerGunSelector.WeaponLastUnlock == 0) SpawnLootNotification("Handgun Ammo Is Full");
         gun.CurrentAmmo = gun.AmmoConfig.MaxAmmo;
         if (playerGunSelector.ActivePrimaryGun == gun) UIWeaponManager.Instance.ChangeAmmoText(gun.CurrentAmmo);
 
@@ -100,5 +97,20 @@ public class LootBox : MonoBehaviour
         }
 
         boxCollider.enabled = true;
+    }
+
+    // TODO: Make a centralized spawnnotificationmanager where scripts can call functions to spawn notifications
+    private void SpawnLootNotification(string message)
+    {
+        UIUpgradeList.Instance.activeNotificationCount++;
+
+        GameObject UpgradePopup = Instantiate(UIUpgradeList.Instance.UpgradePopupPrefab, UIUpgradeList.Instance.UpgradeNotificationSpawnParent.transform, false);
+        TMP_Text popupText = UpgradePopup.GetComponentInChildren<TMP_Text>();
+        popupText.text = message;
+        popupText.color = Color.white;
+
+        UpgradePopup.transform.localPosition = new Vector3(UpgradePopup.transform.localPosition.x, UpgradePopup.transform.localPosition.y + UIUpgradeList.Instance.activeNotificationCount * 20, UpgradePopup.transform.localPosition.z);
+
+        StartCoroutine(UIUpgradeList.Instance.TextDisappearSlowly(popupText.gameObject, 1.5f, 1.5f));
     }
 }

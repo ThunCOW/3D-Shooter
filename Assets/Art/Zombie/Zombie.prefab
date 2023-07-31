@@ -6122,6 +6122,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b806824baf33bb47a55922f5e0c06ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ScorePoint: 0
+  NavMeshRadiusCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  BloodPrefab: {fileID: 6698961337358328877, guid: a99c09a11ff2d084ebf49ae5ab5e84de,
+    type: 3}
+  DamageReactionTime: 0
+  DamageReactionMovementCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  ZombieMoanVolume: 0.18
+  ZombieMoans:
+  - {fileID: 8300000, guid: 368727d9aa4930549947d99a412bfad3, type: 3}
+  - {fileID: 8300000, guid: 4d95640566dd0174984546fdc8c98776, type: 3}
+  - {fileID: 8300000, guid: 07173f4fa753b2241833ac69c297ed93, type: 3}
+  - {fileID: 8300000, guid: 5a66c4dcc4ab7f043bbae4aee28f2982, type: 3}
+  - {fileID: 8300000, guid: 6c6284dd14b78a249bedc9a4196e3b69, type: 3}
+  - {fileID: 8300000, guid: 730d33cb202dadc46a46a70ae9088c71, type: 3}
+  - {fileID: 8300000, guid: 39ba03deb44be9a478c90666425e58e3, type: 3}
+  - {fileID: 8300000, guid: 51d15ac884c52294ba3629c2cc0a33aa, type: 3}
+  - {fileID: 8300000, guid: 7500b5ee98cc1054bb83461f429ecc02, type: 3}
+  - {fileID: 8300000, guid: 0e99337857a6c9a46ba104e249c8b241, type: 3}
+  - {fileID: 8300000, guid: 394f45cdbdfde1b4baf8676bc95cc676, type: 3}
+  - {fileID: 8300000, guid: d85642fbbf9c5584ca9bc0d03b4525a8, type: 3}
+  isHurt: 0
 --- !u!114 &7458981930071734001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6134,10 +6165,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dee2534be5952e949bb5aa6877459b91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PathCalculationTimeMax: 0
+  SnapMovementAndRotation: 0
   MovementSpeed: 1.5
-  RotationSpeed: 0
-  Health: {fileID: 7458981930071733998}
+  RotateTime: 0
   ScorePoint: 100
+  RagdollRadiusCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  DamageReactionTime: 0
+  DamageReactionMovementCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &7458981930071733998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6184,6 +6229,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RagdollActive: 1
+  RagdollRig: {fileID: 0}
   GetRagdollVars: 0
   RagdollColliderList:
   - {fileID: 3850983685544876442}
@@ -8892,6 +8938,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6a9377844714034496e79c5eac9b02c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RemoveRig: 0
   Bones:
   - {fileID: 6756443609788255109}
   - {fileID: 4682281163340860621}
@@ -9233,6 +9280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6a9377844714034496e79c5eac9b02c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RemoveRig: 0
   Bones:
   - {fileID: 3377502802701996660}
   - {fileID: 6457716005433402290}
@@ -10234,6 +10282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6a9377844714034496e79c5eac9b02c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RemoveRig: 0
   Bones:
   - {fileID: 852759317778154722}
   - {fileID: 8977005075194213668}
@@ -10462,6 +10511,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6a9377844714034496e79c5eac9b02c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RemoveRig: 0
   Bones:
   - {fileID: 3798211368929849874}
   - {fileID: 0}

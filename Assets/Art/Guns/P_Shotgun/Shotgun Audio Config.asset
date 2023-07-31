@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5453832d149a17c4d9086272195d8862, type: 3}
   m_Name: Shotgun Audio Config
   m_EditorClassIdentifier: 
-  volume: 0.3
+  volume: 0.264
   FireClips:
   - {fileID: 8300000, guid: f2db47684f327594ab1df26d909469ae, type: 3}
   - {fileID: 8300000, guid: e06ea5ea12bda9c4db39a2d0f183c5ec, type: 3}

@@ -14,16 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 5
   WeaponType: 3
-  Sprite: {fileID: 21300000, guid: 8b97d5934f4b3fa499f92adf8646787b, type: 3}
+  SelectedWeaponSprite: {fileID: 21300000, guid: 8b97d5934f4b3fa499f92adf8646787b,
+    type: 3}
+  InventorySprite: {fileID: 21300000, guid: e24a815b202a8fe4ca5189a51fbaa384, type: 3}
   Name: P_Rocket
   ModelPrefab: {fileID: 7356813350098973372, guid: e4e7b8fca19908c44b49266939c2f7d4,
     type: 3}
   AnimatorLayerName: Rocket_Aim
+  pushDistance: 0
   CurrentAmmo: -1
   Automatic: 1
   lastShootTime: 0
-  SpawnPoint: {x: 0, y: 0.005512865, z: 0}
-  SpawnRotation: {x: -106.214, y: 92.297, z: -40.95099}
   DamageConfig: {fileID: 11400000, guid: 9a0e5d71cacf2c84294672888fb8baaf, type: 2}
   AmmoConfig: {fileID: 11400000, guid: aaa0039c0762fac44ba1ed6f23162a93, type: 2}
   ShootConfig: {fileID: 11400000, guid: 9fd29da4d81138d43a565a3e8d00ae54, type: 2}

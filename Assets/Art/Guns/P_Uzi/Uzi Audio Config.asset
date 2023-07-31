@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5453832d149a17c4d9086272195d8862, type: 3}
   m_Name: Uzi Audio Config
   m_EditorClassIdentifier: 
-  volume: 0.3
+  volume: 0.178
   FireClips:
   - {fileID: 8300000, guid: b1e40e98fbe1ed44ba914d93054ff770, type: 3}
   - {fileID: 8300000, guid: 87e45e5ed17c57b4da93f11fa29f9fbc, type: 3}

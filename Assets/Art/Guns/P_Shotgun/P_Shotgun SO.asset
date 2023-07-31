@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 4
   WeaponType: 2
-  Sprite: {fileID: 21300000, guid: b7c36ae0dd656a543940ea34d9710194, type: 3}
+  SelectedWeaponSprite: {fileID: 21300000, guid: b7c36ae0dd656a543940ea34d9710194,
+    type: 3}
+  InventorySprite: {fileID: 21300000, guid: 69a70f744d4db1f4aa3a10aee9d0c148, type: 3}
   Name: P_Shotgun
   ModelPrefab: {fileID: 7410826465116218185, guid: f881786f4b2627549b47b863eb960413,
     type: 3}

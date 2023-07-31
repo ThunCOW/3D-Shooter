@@ -109,7 +109,7 @@ VFXRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
 --- !u!1 &2134135444312597804
 GameObject:
   m_ObjectHideFlags: 0
@@ -4990,7 +4990,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 25
   DisappearTime: 2.5
-  ExplosionSounds:
+  HitSound:
   - {fileID: 8300000, guid: 8aebd6cfadb9f184f80cda0366a9edf0, type: 3}
   volume: 0.3
   StartPoint: {x: 0, y: 0, z: 0}

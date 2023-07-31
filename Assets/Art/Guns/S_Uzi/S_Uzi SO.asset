@@ -14,17 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 3
   WeaponType: 1
+  SelectedWeaponSprite: {fileID: 0}
+  InventorySprite: {fileID: 0}
   Name: Uzi
   ModelPrefab: {fileID: 9221645319240134734, guid: 7240dcfa20157694b927fd0b983cadc8,
     type: 3}
   AnimatorLayerName: Dual_Handgun_Aim
+  pushDistance: 0
   CurrentAmmo: 0
   Automatic: 1
-  SpawnPoint: {x: 0, y: 0.005512865, z: 0}
-  SpawnRotation: {x: -106.214, y: 92.297, z: -40.95099}
-  DamageConfig: {fileID: 11400000, guid: 222d017be6d1db141b293ca5f6c09cb7, type: 2}
-  AmmoConfig: {fileID: 11400000, guid: 2a031469c25f9c04cada7853111a9961, type: 2}
-  ShootConfig: {fileID: 11400000, guid: efd273d3ced576f4ba2b3e675a4179ce, type: 2}
-  TrailConfig: {fileID: 11400000, guid: a140a3763853e3246a498d164e3f22bc, type: 2}
-  AudioConfig: {fileID: 11400000, guid: 42548be2ba9cf2d46b3a91df57c3f58f, type: 2}
+  lastShootTime: 0
+  DamageConfig: {fileID: 11400000, guid: 21bc46d4c63c3fe4da2d594d35185cfb, type: 2}
+  AmmoConfig: {fileID: 11400000, guid: 92a32af1f5ec61f4cad7af22eebcafac, type: 2}
+  ShootConfig: {fileID: 11400000, guid: dbd182a47c9dc354ba3e59f1cb2be631, type: 2}
+  TrailConfig: {fileID: 11400000, guid: c22db16193f4493469d63e5406e9342e, type: 2}
+  AudioConfig: {fileID: 11400000, guid: f5d299c5e1c514f41bfc796c33ea2dca, type: 2}
   ShootingAudioSource: {fileID: 0}

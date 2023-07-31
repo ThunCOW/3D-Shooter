@@ -1,16 +1,14 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 [CreateAssetMenu(fileName = "Gun", menuName = "Guns/Guns/Handgun", order = 0)]
 public class GunScriptableObject : ScriptableObject, System.ICloneable
 {
     public GunType ID;
     public PlayerWeapons WeaponType;
-    public Sprite Sprite;
+    public Sprite SelectedWeaponSprite;
+    public Sprite InventorySprite;
     public string Name;
     public GameObject ModelPrefab;
     public string AnimatorLayerName;
@@ -35,29 +33,14 @@ public class GunScriptableObject : ScriptableObject, System.ICloneable
     private Animator gunAnimator;
     //private ParticleSystem shootSystem;
     private GameObject shootSystem;
-    private static ObjectPool<TrailRenderer> trailPool;
+    private static ObjectPool<TrailRenderer> TrailPool;
     private static ObjectPool<GameObject> RocketPool;
-
-    public virtual void Spawn(Transform Parent, MonoBehaviour ActiveMonoBehaviour)
+    
+    public void Spawn(Transform Parent, MonoBehaviour ActiveMonoBehaviour)
     {
         activeMonoBehaviour = ActiveMonoBehaviour;
-        
-        switch(TrailConfig.ProjectileType)
-        {
-            case ProjectileType.Trail:
-                if (trailPool == null )
-                    trailPool = new ObjectPool<TrailRenderer>(CreateTrail);
-                break;
-            case ProjectileType.Rocket:
-                if (RocketPool == null)
-                    RocketPool = new ObjectPool<GameObject>(() => CreateProjectile(TrailConfig.ProjectileObject, RocketPool));
-                break;
-            case ProjectileType.Nade:
-                break;
-            default:
-                Debug.LogError("Create Projectile Type Here");
-                break;
-        }
+
+        CreateProjectilePool();
 
         model = Instantiate(ModelPrefab);
         model.transform.SetParent(Parent, false);
@@ -72,7 +55,32 @@ public class GunScriptableObject : ScriptableObject, System.ICloneable
         //shootSystem = GameManager.Instance.Player;
         shootSystem = model;
     }
-
+    private void CreateProjectilePool()
+    {
+        switch(TrailConfig.ProjectileType)
+        {
+            case ProjectileType.Trail:
+                if (TrailPool == null )
+                    TrailPool = new ObjectPool<TrailRenderer>(CreateTrail);
+                break;
+            case ProjectileType.Rocket:
+                if (RocketPool == null)
+                    RocketPool = new ObjectPool<GameObject>(() => CreateProjectile(TrailConfig.ProjectileObject, RocketPool));
+                break;
+            case ProjectileType.Nade:
+                break;
+            default:
+                Debug.LogError("Create Projectile Type Here");
+                break;
+        }
+    }
+    public static void ClearProjectilePool()
+    {
+        if (TrailPool != null)
+            TrailPool.Clear();
+        if (RocketPool != null)
+            RocketPool.Clear();
+    }
     public void Shoot()       // bullet for multiple bullets per shot like how shotgun works
     {
         //gunAnimator.SetTrigger("Shoot");
@@ -142,7 +150,7 @@ public class GunScriptableObject : ScriptableObject, System.ICloneable
         switch(TrailConfig.ProjectileType)
         {
             case ProjectileType.Trail:
-                TrailRenderer trail = trailPool.Get();
+                TrailRenderer trail = TrailPool.Get();
                 yield return null; //avoid position carry-over from last frame if reused
                 trail.emitting = true;
 
@@ -212,7 +220,7 @@ public class GunScriptableObject : ScriptableObject, System.ICloneable
                 TrailRenderer trail = instance.GetComponent<TrailRenderer>();
                 trail.emitting = false;
                 instance.gameObject.SetActive(false);
-                trailPool.Release(trail);
+                TrailPool.Release(trail);
                 break;
             case ProjectileType.Rocket:
                 yield return new WaitForSeconds(2.5f);      // wait for particle effect to disappear
@@ -235,9 +243,10 @@ public class GunScriptableObject : ScriptableObject, System.ICloneable
         {
             case ProjectileType.Rocket:
                 instance = RocketPool.Get();
-                instance.GetComponentInChildren<Projectile>().OnCollision += HandleExplosion;
-                instance.GetComponentInChildren<Projectile>().StartPoint = StartPoint;
-                instance.GetComponentInChildren<Projectile>().EndPoint = EndPoint;
+                Projectile projectile = instance.GetComponentInChildren<Projectile>();
+                projectile.OnCollision += HandleExplosion;
+                projectile.StartPoint = StartPoint;
+                projectile.EndPoint = EndPoint;
                 instance.transform.position = StartPoint;
                 instance.transform.GetChild(0).gameObject.SetActive(true);
 #pragma warning disable
@@ -308,7 +317,7 @@ public class GunScriptableObject : ScriptableObject, System.ICloneable
 
         config.ID = ID;
         config.WeaponType = WeaponType;
-        config.Sprite = Sprite;
+        config.SelectedWeaponSprite = SelectedWeaponSprite;
         config.Name = Name;
         config.ModelPrefab = ModelPrefab;
         config.AnimatorLayerName = AnimatorLayerName;

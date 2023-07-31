@@ -2,8 +2,8 @@ using UnityEngine;
 
 public interface IDamageable
 {
-    public int CurrentHealth { get; }
-    public int MaxHealth { get; }
+    public float CurrentHealth { get; }
+    public float MaxHealth { get; }
 
     public delegate void TakeDamageEvent(Vector3 forceDir, float pushDistance);
     public event TakeDamageEvent OnTakeDamage;

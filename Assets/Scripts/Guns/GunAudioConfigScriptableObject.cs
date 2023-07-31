@@ -12,6 +12,13 @@ public class GunAudioConfigScriptableObject : ScriptableObject
 
     public void PlayShootingClip(AudioSource AudioSource)
     {
+        if (Random.Range(0, 10) == 0)
+        {
+            AudioSource.pitch = 1 + Random.Range(-0.15f, 0.15f);
+        }
+        else
+            AudioSource.pitch = 1;
+
         AudioSource.PlayOneShot(FireClips[Random.Range(0, FireClips.Length)], volume);
     }
 

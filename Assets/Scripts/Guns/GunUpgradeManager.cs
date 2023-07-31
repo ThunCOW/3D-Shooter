@@ -28,6 +28,8 @@ public class GunUpgradeManager : MonoBehaviour
 
         if (CurrentLevel >= GunUpgradeList.Upgrades[0].Level)
         {
+            UIUpgradeList.Instance.UnlockUpgrade();
+
             GunScriptableObject gun;
             switch (GunUpgradeList.Upgrades[0].Upgrades[0].UpgradeType)
             {

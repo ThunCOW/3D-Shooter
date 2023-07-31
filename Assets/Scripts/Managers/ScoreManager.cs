@@ -82,6 +82,9 @@ public class ScoreManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        if (Instance != null)
+            Destroy(Instance);
+
         Instance = this;
     }
 

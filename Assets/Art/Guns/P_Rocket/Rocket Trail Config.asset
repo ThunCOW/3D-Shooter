@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa717ef6116c7f149a18f5d5cf21176d, type: 3}
   m_Name: Rocket Trail Config
   m_EditorClassIdentifier: 
-  ProjectileObject: {fileID: 2134135444312597804, guid: 5ebb2c8c507b23a4caa5654d09a6ad5f,
+  ProjectileObject: {fileID: 5989635654363594844, guid: e5665ea78e9ecee43b45688593bdc42f,
     type: 3}
   ProjectileType: 1
   Material: {fileID: 2100000, guid: 743feb028c5a81b45a13f504f7108212, type: 2}

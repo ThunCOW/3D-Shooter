@@ -18,8 +18,8 @@ TagManager:
   - WorldBorder
   - Enemy
   - Bullet
-  - 
-  - 
+  - AimLayer
+  - EnemyProjectile
   - 
   - 
   - 

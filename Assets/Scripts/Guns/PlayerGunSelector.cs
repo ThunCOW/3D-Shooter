@@ -18,6 +18,7 @@ public enum PlayerWeapons
     Uzi,
     Shotgun,
     Rocket,
+    Locked
 }
 
 public class PlayerGunSelector : MonoBehaviour
@@ -59,7 +60,7 @@ public class PlayerGunSelector : MonoBehaviour
     public int Dual_Uzi_Unlock_Level;
 
     //**************** Runtime Filled ****************
-    public int WeaponLastUnlockIndex;                               // The equivelant of PlayerWeapons in index, consider it like the last unlocked index in PlayerWeapons, starts with 0 which is only handgun
+    public PlayerWeapons WeaponLastUnlock = PlayerWeapons.Handgun;
 
     [Header("*************Weapon Unlock Editor Variables***********")]
     [SerializeField] private bool Dual_Handgun;
@@ -74,7 +75,7 @@ public class PlayerGunSelector : MonoBehaviour
     private void Start()
     {
         PlayerAnimatorManager = GameManager.Instance.Player.GetComponentInChildren<AnimatorManager>();
-
+        
         EquipWeapon();
 
         ScoreManager.Instance.onUnlockUpgradeList += UnlockWeapon;
@@ -100,7 +101,7 @@ public class PlayerGunSelector : MonoBehaviour
 
         PlayerAnimatorManager.AimLayerName = ActivePrimaryGun.AnimatorLayerName;
 
-        UIWeaponManager.Instance.ChangeWeapon(ActivePrimaryGun.Sprite, ActivePrimaryGun.CurrentAmmo);
+        UIWeaponManager.Instance.ChangeWeapon(ActivePrimaryGun.SelectedWeaponSprite, ActivePrimaryGun.CurrentAmmo);
     }
 
     private void EquipSecondary()
@@ -162,6 +163,7 @@ public class PlayerGunSelector : MonoBehaviour
 
     private bool primaryShoot;
     private float lastEmptyBulletTime;
+    public GameObject BloodPrefab;
     public void Shoot()
     {
         if (Time.time > ActivePrimaryGun.ShootConfig.FireRate + ActivePrimaryGun.lastShootTime)
@@ -204,15 +206,21 @@ public class PlayerGunSelector : MonoBehaviour
     {
         if (CurrentLevel == Uzi_Unlock_Level)
         {
-            WeaponLastUnlockIndex = 1;
+            WeaponLastUnlock = PlayerWeapons.Uzi;
+            UIUpgradeList.Instance.UnlockUpgrade();
+            InvWeaponManager.Instance.UnlockWeapon(WeaponLastUnlock);
         }
         else if(CurrentLevel == Shotgun_Unlock_Level)
         {
-            WeaponLastUnlockIndex = 2;
+            WeaponLastUnlock = PlayerWeapons.Shotgun;
+            UIUpgradeList.Instance.UnlockUpgrade();
+            InvWeaponManager.Instance.UnlockWeapon(WeaponLastUnlock);
         }
         else if(CurrentLevel == Rocket_Launcher_Unlock_Level)
         {
-            WeaponLastUnlockIndex = 3;
+            WeaponLastUnlock = PlayerWeapons.Rocket;
+            UIUpgradeList.Instance.UnlockUpgrade();
+            InvWeaponManager.Instance.UnlockWeapon(WeaponLastUnlock);
         }
 
         if(CurrentLevel == Dual_Handgun_Unlock_Level)
@@ -220,19 +228,44 @@ public class PlayerGunSelector : MonoBehaviour
             Dual_Handgun = true;
             if (ActivePrimaryGun.WeaponType == PlayerWeapons.Handgun)
                 SelectWeapon((int)PlayerWeapons.Handgun);
+            UIUpgradeList.Instance.UnlockUpgrade();
         }
         else if(CurrentLevel == Dual_Uzi_Unlock_Level)
         {
             Dual_Uzi = true;
             if (ActivePrimaryGun.WeaponType == PlayerWeapons.Uzi)
                 SelectWeapon((int)PlayerWeapons.Uzi);
+            UIUpgradeList.Instance.UnlockUpgrade();
         }
     }
 
     public void ScrollWeapon(int indexChange)
     {
+        if (WeaponLastUnlock == 0)
+            return;
+
+        //PlayerWeapon = InvWeaponManager.Instance.ScrollWeapon(indexChange, (int)WeaponLastUnlock);
+    }
+
+    public void SelectWeapon(int index)
+    {
+        //if (index <= WeaponLastUnlockIndex)
+            //PlayerWeapon = InvWeaponManager.Instance.SelectWeapon(index);
+
+        PlayerWeapons newWeapon = InvWeaponManager.Instance.SelectWeapon(index);
+        if (newWeapon != PlayerWeapons.Locked)
+            PlayerWeapon = newWeapon;
+    }
+
+    private int mod(int x, int m)
+    {
+        return (x % m + m) % m;
+    }
+    /*public void ScrollWeapon(int indexChange)
+    {
         if (WeaponLastUnlockIndex == 0)
             return;
+        
         PlayerWeapon = (PlayerWeapons)mod((((int)PlayerWeapon) + indexChange), WeaponLastUnlockIndex);
     }
 
@@ -245,5 +278,5 @@ public class PlayerGunSelector : MonoBehaviour
     private int mod(int x, int m)
     {
         return (x % m + m) % m;
-    }
+    }*/
 }
